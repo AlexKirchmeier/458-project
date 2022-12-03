@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+
+  <link rel="stylesheet" href="css/dashboard.css">
+
+  <div class="grid-container">
+    <div id="info">
+        <h2 id="title">Info title</h2>
+        <p>Explanatory text</p>
+    </div>
+    <div id="map"></div>
+    <div id="panel"><h2>Interactive panel</h2></div>
+    <div id="bar"><h2>Bar title</h2></div>
+  </div>
+  <script>
+    // Set up map
+    var height = 450;
+    var width = 800;
+    var projection = d3.geoMercator();
+    var path = d3.geoPath().projection(projection);
+
+    var svgM = d3.select("#map")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+    // Set up bar chart
+    var bmargin = {top: 20, right: 20, bottom: 80, left: 100},
+      bwidth = width - bmargin.left - bmargin.right,
+      bheight = 350 - bmargin.top - bmargin.bottom;
+
+    var svgB = d3.select("#bar").append("svg")
+                 .attr("width", bwidth + bmargin.left + bmargin.right)
+                 .attr("height", bheight + bmargin.top + bmargin.bottom)
+                 .append("g")
+                 .attr("transform","translate(" + bmargin.left + "," + bmargin.top + ")")
+    svgB.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", bwidth )
+        .attr("y", bheight + bmargin.top+50)
+        .text("Census Tracts");
+    svgB.append("text")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -bmargin.left+20)
+        .attr("x", -bmargin.top)
+       .text("Percentage of Income")
+
+    // Load data
+    d3.json('assets/unaffordable-housing.geojson').then(function(data) {
+      var b, s, t;
+      projection.scale(1).translate([0, 0]);
+      var b = path.bounds(data);
+      var s = .9 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+      var t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+      projection.scale(s).translate(t);
+
+      var arr = [];
+      for(var i = 0; i < data.features.length; i++){
+        arr.push(parseFloat(data.features[i].properties.Percentage))
+      }
+      var maxVal = d3.max(arr);
+
+      var color = d3.scaleThreshold().domain([25, 35, 45, 55, 65]).range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'])
+
+      var hover = function(d,i) {
+                    d3.selectAll('path').attr('opacity', 0.8)
+                    d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 3)
+                    d3.selectAll("rect.barc" + i).style("fill", "black")
+      }
+
+      var out = function(d, i){
+                  d3.selectAll('path').attr('opacity', 1)
+                  d3.select(this).style('stroke', 'grey').style('stroke-width', 1)
+                  d3.selectAll("rect.barc" + i).style("fill", "red")
+      }
+
+      // Create a map
+      var map = svgM.append('g').attr('class', 'boundary');
+      map.selectAll('path').data(data.features).enter()
+          .append('path')
+          .attr('d', path)
+          .attr('fill', 'grey')
+          .attr('stroke', 'grey')
+          .style('fill', function(d){return color(d.properties.Percentage)})
+          .on("mouseover", hover)
+          .on("mouseout", out);
+
+      // var mapZoom = d3.zoom().on("zoom", zoomed);
+      // var zoomSettings = d3.zoomIdentity.translate(width/2, height/2).scale(120);
+      // d3.select("svg").call(mapZoom).call(mapZoom.transform, zoomSettings);
+      // function zoomed() {
+      //   var e = d3.event;
+      //   projection.translate([e.transform.x, e.transform.y]).scale(e.transform.k)
+      // }
+
+      var legend = svgM.append("g").attr("class","legend")
+                      .attr("transform", "translate(10,320)");
+      legend = d3.legendColor()
+                 .labels(d3.legendHelpers.thresholdLabels)
+                 .scale(color);
+      svgM.select(".legend").call(legend);
+
+      // Create a bar graph
+      var wa = data.features
+      var name = d3.map(wa, d=>d.properties.Census_Tract).keys();
+
+      var xScale = d3.scaleBand().domain(name).range([0, bwidth]);
+      var yScale = d3.scaleLinear().domain([0, maxVal]).range([bheight, 0]);
+
+      svgB.append("g")
+          .call(d3.axisLeft(yScale));
+      svgB.append("g")
+          .attr("transform", "translate(0," + bheight + ")")
+          //.call(d3.axisBottom(xScale)).selectAll("text").attr("transform", "translate(-10,10)rotate(-45)");
+      svgB.append('g').selectAll('rect').data(data.features)
+          .enter()
+          .append("rect")
+          .attr("x", function(d, i) {return i*(bwidth/name.length)})
+          .attr("y", function(d) {return yScale(d.properties.Percentage)})
+          .attr("width", 1/4*xScale.bandwidth())
+          .attr("height", function(d) {return bheight - yScale(d.properties.Percentage)})
+          .style("fill", "red")
+          .attr("class",function(d,i) {return "barc" + i})
+    });
+  </script>
+
+</body> 
+</html>
