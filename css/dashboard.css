@@ -1,0 +1,26 @@
+.grid-container {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 3fr 5fr;
+    grid-gap: 10px;
+    border: 1px solid blue;
+} 
+
+/*  
+#info {
+}
+
+#map {
+}
+
+#panel {
+}
+
+#bar {
+}
+*/
+
+#info, #map, #panel, #bar {
+    border: 1px solid black;
+    padding: 16px;
+}
