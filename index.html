@@ -15,7 +15,12 @@
         <p>Explanatory text</p>
     </div>
     <div id="map"></div>
-    <div id="panel"><h2>Interactive panel</h2></div>
+    <div id="panel">
+      <h2>Interactive panel</h2>
+      <div id="panel-info">
+        <p>Hover over a census tract!</p>
+      </div>
+    </div>
     <div id="bar"><h2>Bar title</h2></div>
   </div>
   <script>
@@ -67,18 +72,22 @@
       }
       var maxVal = d3.max(arr);
 
-      var color = d3.scaleThreshold().domain([25, 35, 45, 55, 65]).range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'])
+      var color = d3.scaleThreshold().domain([20, 30, 35, 45, 50]).range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'])
 
       var hover = function(d,i) {
-                    d3.selectAll('path').attr('opacity', 0.8)
-                    d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 3)
-                    d3.selectAll("rect.barc" + i).style("fill", "black")
+        var div = document.getElementById('panel-info');
+        div.innerHTML = "Census Tract: " + d.properties.Census_Tract + "</br>"
+          + "Population: " + d.properties.Population + "</br>"
+          + "Percentage of Income: "+ d.properties.Percentage + "</br>"
+        d3.selectAll('path').attr('opacity', 0.8);
+        d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 3);
+        d3.selectAll("rect.barc" + i).style("fill", "black") //.style("stroke-width", 3)
       }
 
       var out = function(d, i){
-                  d3.selectAll('path').attr('opacity', 1)
-                  d3.select(this).style('stroke', 'grey').style('stroke-width', 1)
-                  d3.selectAll("rect.barc" + i).style("fill", "red")
+        d3.selectAll('path').attr('opacity', 1)
+        d3.select(this).style('stroke', 'grey').style('stroke-width', 1)
+        d3.selectAll("rect.barc" + i).style("fill", "red")
       }
 
       // Create a map
@@ -128,6 +137,8 @@
           .attr("height", function(d) {return bheight - yScale(d.properties.Percentage)})
           .style("fill", "red")
           .attr("class",function(d,i) {return "barc" + i})
+          // .on("mouseover", hover)
+          // .on("mouseout", out);
     });
   </script>
 
