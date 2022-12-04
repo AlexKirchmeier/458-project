@@ -11,34 +11,35 @@
 
   <div class="grid-container">
     <div id="info">
-        <h2 id="title">Info title</h2>
+        <h2 id="title">Unaffordable Housing in WA State</h2>
         <p>Explanatory text</p>
     </div>
     <div id="map"></div>
     <div id="panel">
-      <h2>Interactive panel</h2>
+      <h2>Census Tract Information</h2>
       <div id="panel-info">
         <p>Hover over a census tract!</p>
       </div>
     </div>
-    <div id="bar"><h2>Bar title</h2></div>
+    <div id="bar"></div>
   </div>
   <script>
     // Set up map
-    var height = 450;
-    var width = 800;
+    var height = 300;
+    var width = 900;
     var projection = d3.geoMercator();
     var path = d3.geoPath().projection(projection);
 
     var svgM = d3.select("#map")
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height);
+                 .append("svg")
+                 .attr("width", width)
+                 .attr("height", height);
 
     // Set up bar chart
+      // Only use census tracts that exceed x percent?
     var bmargin = {top: 20, right: 20, bottom: 80, left: 100},
       bwidth = width - bmargin.left - bmargin.right,
-      bheight = 350 - bmargin.top - bmargin.bottom;
+      bheight = height - bmargin.top - bmargin.bottom;
 
     var svgB = d3.select("#bar").append("svg")
                  .attr("width", bwidth + bmargin.left + bmargin.right)
@@ -47,8 +48,8 @@
                  .attr("transform","translate(" + bmargin.left + "," + bmargin.top + ")")
     svgB.append("text")
         .attr("text-anchor", "end")
-        .attr("x", bwidth )
-        .attr("y", bheight + bmargin.top+50)
+        .attr("x", bwidth / 2)
+        .attr("y", bheight + bmargin.top+30)
         .text("Census Tracts");
     svgB.append("text")
         .attr("text-anchor", "end")
@@ -76,9 +77,9 @@
 
       var hover = function(d,i) {
         var div = document.getElementById('panel-info');
-        div.innerHTML = "Census Tract: " + d.properties.Census_Tract + "</br>"
-          + "Population: " + d.properties.Population + "</br>"
-          + "Percentage of Income: "+ d.properties.Percentage + "</br>"
+        div.innerHTML = "<b>Census Tract: </b>" + d.properties.Census_Tract + "</br>"
+          + "<b>Population: </b>" + d.properties.Population + "</br>"
+          + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>"
         d3.selectAll('path').attr('opacity', 0.8);
         d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 3);
         d3.selectAll("rect.barc" + i).style("fill", "black") //.style("stroke-width", 3)
@@ -103,14 +104,14 @@
 
       // var mapZoom = d3.zoom().on("zoom", zoomed);
       // var zoomSettings = d3.zoomIdentity.translate(width/2, height/2).scale(120);
-      // d3.select("svg").call(mapZoom).call(mapZoom.transform, zoomSettings);
+      // d3.select("svgM").call(mapZoom).call(mapZoom.transform, zoomSettings);
       // function zoomed() {
       //   var e = d3.event;
       //   projection.translate([e.transform.x, e.transform.y]).scale(e.transform.k)
       // }
 
       var legend = svgM.append("g").attr("class","legend")
-                      .attr("transform", "translate(10,320)");
+                      .attr("transform", "translate(10, 180)");
       legend = d3.legendColor()
                  .labels(d3.legendHelpers.thresholdLabels)
                  .scale(color);
@@ -141,6 +142,5 @@
           // .on("mouseout", out);
     });
   </script>
-
 </body> 
 </html>

@@ -1,7 +1,7 @@
 .grid-container {
     height: 100vh;
     display: grid;
-    grid-template-columns: 2fr 5fr;
+    grid-template-columns: 2fr 7fr;
     grid-gap: 10px;
     border: 1px solid blue;
 } 
@@ -23,4 +23,8 @@
 #info, #map, #panel, #bar {
     border: 1px solid black;
     padding: 16px;
+}
+
+h2 {
+    text-align: center;
 }
