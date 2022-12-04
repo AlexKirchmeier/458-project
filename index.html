@@ -87,7 +87,7 @@
 
       var out = function(d, i){
         d3.selectAll('path').attr('opacity', 1)
-        d3.select(this).style('stroke', 'grey').style('stroke-width', 1)
+        d3.select(this).style('stroke', 'grey').style('stroke-width', 0.3)
         d3.selectAll("rect.barc" + i).style("fill", "red")
       }
 
@@ -98,6 +98,7 @@
           .attr('d', path)
           .attr('fill', 'grey')
           .attr('stroke', 'grey')
+          .attr('stroke-width', 0.3)
           .style('fill', function(d){return color(d.properties.Percentage)})
           .on("mouseover", hover)
           .on("mouseout", out);
