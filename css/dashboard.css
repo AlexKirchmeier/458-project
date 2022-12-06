@@ -6,19 +6,18 @@
     border: 1px solid blue;
 } 
 
-/*  
-#info {
+/* #info {
 }
 
 #map {
 }
 
 #panel {
-}
+} */
 
 #bar {
+    font-weight: bold;
 }
-*/
 
 #info, #map, #panel, #bar {
     border: 1px solid black;

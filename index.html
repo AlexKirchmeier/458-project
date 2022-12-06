@@ -5,6 +5,7 @@
 </head>
 <body>
   <script src="http://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 
   <link rel="stylesheet" href="css/dashboard.css">
@@ -67,11 +68,16 @@
       var t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
       projection.scale(s).translate(t);
 
+      // var percentSorted = data.features.slice().sort((a, b) => d3.descending(+a.Percentage, +b.Percentage));
+        // function(d){return d3.descending(d.Percentage)});
+      // console.log(percentSorted);
+
       var arr = [];
       for(var i = 0; i < data.features.length; i++){
         arr.push(parseFloat(data.features[i].properties.Percentage))
       }
       var maxVal = d3.max(arr);
+      // var maxVal = percentSorted[0]
 
       var color = d3.scaleThreshold().domain([20, 30, 35, 45, 50]).range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'])
 
@@ -105,10 +111,13 @@
 
       // var mapZoom = d3.zoom().on("zoom", zoomed);
       // var zoomSettings = d3.zoomIdentity.translate(width/2, height/2).scale(120);
-      // d3.select("svgM").call(mapZoom).call(mapZoom.transform, zoomSettings);
+      // d3.select("map").call(mapZoom).call(mapZoom.transform, zoomSettings);
       // function zoomed() {
       //   var e = d3.event;
       //   projection.translate([e.transform.x, e.transform.y]).scale(e.transform.k)
+      //   //  d3.selectAll("circle.points")
+      //      // .attr("cx", d => projection([d.x,d.y])[0])
+      //      // .attr("cy", d => projection([d.x,d.y])[1])
       // }
 
       var legend = svgM.append("g").attr("class","legend")
@@ -129,7 +138,7 @@
           .call(d3.axisLeft(yScale));
       svgB.append("g")
           .attr("transform", "translate(0," + bheight + ")")
-          //.call(d3.axisBottom(xScale)).selectAll("text").attr("transform", "translate(-10,10)rotate(-45)");
+          // .call(d3.axisBottom(xScale)).selectAll("text").attr('opacity', 0);
       svgB.append('g').selectAll('rect').data(data.features)
           .enter()
           .append("rect")
@@ -139,8 +148,6 @@
           .attr("height", function(d) {return bheight - yScale(d.properties.Percentage)})
           .style("fill", "red")
           .attr("class",function(d,i) {return "barc" + i})
-          // .on("mouseover", hover)
-          // .on("mouseout", out);
     });
   </script>
 </body> 
