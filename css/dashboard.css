@@ -1,29 +1,45 @@
 .grid-container {
-    height: 100vh;
+    height: 100%;
     display: grid;
-    grid-template-columns: 2fr 7fr;
-    grid-gap: 10px;
-    border: 1px solid blue;
+    grid-template-columns: 3fr 5fr;
+    grid-gap: 3px;
 } 
 
-/* #info {
+#info {
+    font-size: 14px;
 }
 
 #map {
+    font-size: 12px;
 }
 
 #panel {
-} */
-
-#bar {
-    font-weight: bold;
+    font-size: 18px;
 }
 
+/* #bar {
+} */
+
 #info, #map, #panel, #bar {
-    border: 1px solid black;
+    border: 2px solid black;
+    border-radius: 2px;
     padding: 16px;
 }
 
+#map, #bar {
+    font-weight: bold;
+}
+
+/* h1 {
+} */
+
 h2 {
+    font-size: 24px;
+}
+
+/* h3 {
+} */
+
+h1, h2, h3 {
     text-align: center;
 }

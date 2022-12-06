@@ -12,7 +12,7 @@
 
   <div class="grid-container">
     <div id="info">
-        <h2 id="title">Unaffordable Housing in WA State</h2>
+        <h1 id="title">Unaffordable Housing in WA State</h1>
         <p>Explanatory text</p>
     </div>
     <div id="map"></div>
@@ -22,7 +22,9 @@
         <p>Hover over a census tract!</p>
       </div>
     </div>
-    <div id="bar"></div>
+    <div id="bar">
+      <h3>Percentage of Income Spent on Housing by Census Tract</h3>
+    </div>
   </div>
   <script>
     // Set up map
@@ -38,6 +40,7 @@
 
     // Set up bar chart
       // Only use census tracts that exceed x percent?
+      // Sort by percentage?
     var bmargin = {top: 20, right: 20, bottom: 80, left: 100},
       bwidth = width - bmargin.left - bmargin.right,
       bheight = height - bmargin.top - bmargin.bottom;
@@ -81,20 +84,39 @@
 
       var color = d3.scaleThreshold().domain([20, 30, 35, 45, 50]).range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'])
 
+      // Interactions with map
       var hover = function(d,i) {
         var div = document.getElementById('panel-info');
         div.innerHTML = "<b>Census Tract: </b>" + d.properties.Census_Tract + "</br>"
           + "<b>Population: </b>" + d.properties.Population + "</br>"
-          + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>"
+          + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>";
         d3.selectAll('path').attr('opacity', 0.8);
-        d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 3);
-        d3.selectAll("rect.barc" + i).style("fill", "black") //.style("stroke-width", 3)
+        d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 2);
+        d3.selectAll("rect.barc" + i).style('stroke','black').style("stroke-width", 2);
       }
 
       var out = function(d, i){
-        d3.selectAll('path').attr('opacity', 1)
-        d3.select(this).style('stroke', 'grey').style('stroke-width', 0.3)
-        d3.selectAll("rect.barc" + i).style("fill", "red")
+        d3.selectAll('path').attr('opacity', 1);
+        d3.select(this).style('stroke', 'grey').style('stroke-width', 0.3);
+        d3.selectAll("rect.barc" + i)
+          .style('stroke', function(d) {return color(d.properties.Percentage)})
+          .style('stroke-width', 0.5);
+      }
+
+      // Interactions with bar chart
+        // Interact with map?
+      var hoverB = function(d,i) {
+        var div = document.getElementById('panel-info');
+        div.innerHTML = "<b>Census Tract: </b>" + d.properties.Census_Tract + "</br>"
+          + "<b>Population: </b>" + d.properties.Population + "</br>"
+          + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>";
+        d3.select(this).attr('opacity', 1).style('stroke', 'Black').style('stroke-width', 2);
+      }
+
+      var outB = function(d, i){
+        d3.select(this)
+          .style('stroke', function(d) {return color(d.properties.Percentage)})
+          .style('stroke-width', 0.5);
       }
 
       // Create a map
@@ -121,7 +143,7 @@
       // }
 
       var legend = svgM.append("g").attr("class","legend")
-                      .attr("transform", "translate(10, 180)");
+                      .attr("transform", "translate(10, 200)");
       legend = d3.legendColor()
                  .labels(d3.legendHelpers.thresholdLabels)
                  .scale(color);
@@ -146,8 +168,12 @@
           .attr("y", function(d) {return yScale(d.properties.Percentage)})
           .attr("width", 1/4*xScale.bandwidth())
           .attr("height", function(d) {return bheight - yScale(d.properties.Percentage)})
-          .style("fill", "red")
+          .style("fill", function(d) {return color(d.properties.Percentage)})
+          .style('stroke', function(d) {return color(d.properties.Percentage)})
+          .style('stroke-width', 0.3)
           .attr("class",function(d,i) {return "barc" + i})
+          .on("mouseover", hoverB)
+          .on("mouseout", outB);
     });
   </script>
 </body> 
