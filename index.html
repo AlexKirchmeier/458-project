@@ -23,7 +23,7 @@
       </div>
     </div>
     <div id="bar">
-      <h3>Percentage of Income Spent on Housing by Census Tract</h3>
+      <!-- <h3>Percentage of Income Spent on Housing by Census Tract</h3> -->
     </div>
   </div>
   <script>
@@ -41,26 +41,26 @@
     // Set up bar chart
       // Only use census tracts that exceed x percent?
       // Sort by percentage?
-    var bmargin = {top: 20, right: 20, bottom: 80, left: 100},
+    var bmargin = {top: 10, right: 10, bottom: 10, left:20},
       bwidth = width - bmargin.left - bmargin.right,
-      bheight = height - bmargin.top - bmargin.bottom;
+      bheight = height / 1.5 - bmargin.top - bmargin.bottom;
 
     var svgB = d3.select("#bar").append("svg")
                  .attr("width", bwidth + bmargin.left + bmargin.right)
                  .attr("height", bheight + bmargin.top + bmargin.bottom)
                  .append("g")
                  .attr("transform","translate(" + bmargin.left + "," + bmargin.top + ")")
-    svgB.append("text")
-        .attr("text-anchor", "end")
-        .attr("x", bwidth / 2)
-        .attr("y", bheight + bmargin.top+30)
-        .text("Census Tracts");
-    svgB.append("text")
-        .attr("text-anchor", "end")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -bmargin.left+20)
-        .attr("x", -bmargin.top)
-       .text("Percentage of Income")
+    // svgB.append("text")
+    //     .attr("text-anchor", "end")
+    //     .attr("x", bwidth / 2)
+    //     .attr("y", bheight + bmargin.top+30)
+    //     .text("Census Tracts");
+    // svgB.append("text")
+    //     .attr("text-anchor", "end")
+    //     .attr("transform", "rotate(-90)")
+    //     .attr("y", -bmargin.left+20)
+    //     .attr("x", -bmargin.top)
+    //    .text("Percent of Income")
 
     // Load data
     d3.json('assets/unaffordable-housing.geojson').then(function(data) {
