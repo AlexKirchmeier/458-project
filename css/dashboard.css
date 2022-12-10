@@ -1,3 +1,7 @@
+* {
+    font-family: Arial;
+}
+
 .grid-container {
     height: 100%;
     display: grid;
@@ -9,12 +13,11 @@
     font-size: 14px;
 }
 
-#map {
-    font-size: 12px;
-}
+/* #map {
+} */
 
 #panel {
-    font-size: 18px;
+    font-size: 15;
 }
 
 /* #bar {
@@ -26,15 +29,12 @@
     padding: 16px;
 }
 
-#map, #bar {
-    font-weight: bold;
+h1 {
+    font-size: 24px;
 }
 
-/* h1 {
-} */
-
 h2 {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 /* h3 {
@@ -44,12 +44,12 @@ h1, h2, h3 {
     text-align: center;
 }
 
-text { font-family: Helvetica;
+text {
     font-weight: 300;
     font-size: 12px;
-  }
+}
 
-  div.tooltip {
+div.tooltip {
     position: absolute;
     text-align: left;
     padding: .2rem;
@@ -59,4 +59,4 @@ text { font-family: Helvetica;
     border-radius: 8px;
     pointer-events: none;
     font-size: .7rem;
-  }
+}
