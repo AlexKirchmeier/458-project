@@ -77,8 +77,10 @@
       }
       var maxVal = d3.max(arr);
 
-      // var percentSorted = arr.sort();
-      // console.log(percentSorted);
+      // sortedData = data.features.slice().sort(function(a,b) {
+      //   return d3.ascending(parseFloat(a.properties.Percentage), parseFloat(b.properties.Percentage))
+      // })
+      // console.log(sortedData);
 
       var color = d3.scaleThreshold().domain([20, 30, 35, 45, 50]).range(['#fef0d9','#fdd49e','#fdbb84','#fc8d59','#e34a33','#b30000'])
 
@@ -193,7 +195,7 @@
       svgB.append("g")
           .attr("transform", "translate(0," + bheight + ")")
           // .call(d3.axisBottom(xScale)).selectAll("text").attr('opacity', 0);
-      svgB.append('g').selectAll('rect').data(data.features)
+      svgB.append('g').selectAll('rect').data(data.features) //sortedData
           .enter()
           .append("rect")
           .attr("x", function(d, i) {return i*(bwidth/name.length)})
@@ -206,6 +208,8 @@
           .attr("class",function(d,i) {return "barc" + i})
           .on("mouseover", hoverB)
           .on("mouseout", outB);
+      
+      svgB.exit().remove() // New d3 function to remove empty data values from bar chart
 
       // Pan and zoom map
       var zoom = d3.zoom()
