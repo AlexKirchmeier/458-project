@@ -40,7 +40,7 @@
 
     // Set up bar chart
       // Only use census tracts that exceed x percent?
-      // Sort by percentage?
+      // Sort by percentage? (Using d3.ascending?)
     var bmargin = {top: 10, right: 10, bottom: 5, left: 25},
       bwidth = width - bmargin.left - bmargin.right,
       bheight = height / 2.5 - bmargin.top - bmargin.bottom;
@@ -103,15 +103,16 @@
 
       // Interactions with bar chart
         // Interact with map?
-      var hoverB = function(d,i) {
+      var hoverB = function(d) {
         var div = document.getElementById('panel-info');
         div.innerHTML = "<b>Census Tract: </b>" + d.properties.Census_Tract + "</br>"
           + "<b>Population: </b>" + d.properties.Population + "</br>"
           + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>";
-        d3.select(this).attr('opacity', 1).style('stroke', 'Black').style('stroke-width', 2);
+        d3.select(this).style('stroke', 'Black').style('stroke-width', 2);
+        // d3.select(d.path).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 2);
       }
 
-      var outB = function(d, i){
+      var outB = function(d){
         d3.select(this)
           .style('stroke', function(d) {return color(d.properties.Percentage)})
           .style('stroke-width', 0.5);
