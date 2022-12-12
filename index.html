@@ -71,6 +71,7 @@
       }
       var maxVal = d3.max(arr);
 
+      // Attempt to sort data (complicated by undefined values breaking up process):
       // sortedData = data.features.slice().sort(function(a,b) {
       //   return d3.ascending(parseFloat(a.properties.Percentage), parseFloat(b.properties.Percentage))
       // })
@@ -85,7 +86,7 @@
           + "<b>Population: </b>" + d.properties.Population + "</br>"
           + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>";
         d3.selectAll('path').attr('opacity', 0.8);
-        d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 2);
+        d3.select(this).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 1);
         d3.selectAll("rect.barc" + i).style('stroke','black').style("stroke-width", 2);
       }
 
@@ -104,7 +105,8 @@
           + "<b>Population: </b>" + d.properties.Population + "</br>"
           + "<b>Percentage of Income: </b>"+ d.properties.Percentage + "</br>";
         d3.select(this).style('stroke', 'Black').style('stroke-width', 2);
-        // d3.select(d.path).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 2);
+        // Attempt to have selected bars highlight corresponding census tracts:
+        // d3.select(d.path).attr('opacity', 1).style('stroke', 'Goldenrod').style('stroke-width', 1);
       }
 
       var outB = function(d) {
@@ -198,7 +200,8 @@
         .on("mouseover", hoverB)
         .on("mouseout", outB);
       
-      svgB.exit().remove(); // New d3 function to remove empty data values from bar chart
+      // New d3 function to remove empty data values from bar chart
+      svgB.exit().remove();
 
       // Pan and zoom map
       var zoom = d3.zoom()
