@@ -35,7 +35,7 @@
   </div>
   <script>
     // Set up map
-    var height = 400;
+    var height = 450;
     var width = 900;
     var projection = d3.geoMercator();
     var path = d3.geoPath().projection(projection);
@@ -171,7 +171,7 @@
         .on("mouseout", out);
 
       var legend = svgM.append("g").attr("class","legend")
-                       .attr("transform", "translate(10, 300)");
+                       .attr("transform", "translate(10, 340)");
       legend = d3.legendColor()
                  .labels(d3.legendHelpers.thresholdLabels)
                  .scale(color);
@@ -212,5 +212,8 @@
       svgM.call(zoom);
     });
   </script>
-</body> 
+</body>
+<div id="footer">
+Data collected from <a href="https://geo.wa.gov/" target="_blank">Washington GeoSpatial Open Data Portal</a> and <a href="http://www.awha.org/" target="_blank">Association of Washington Housing Authorities</a>
+</div>
 </html>
